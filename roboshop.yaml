@@ -41,7 +41,7 @@
         state: present
         zone: "{{ zone }}"
         record: "{{ item.item }}"
-        type: CNAME
+        type: A
         value: "{{ item.instances[0].private_ip_address }}"
         ttl: 1
       loop: "{{ ec2_output.results }}"
