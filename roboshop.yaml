@@ -66,8 +66,8 @@
         type: A
       loop: "{{ name_of_instances }}"
       when: 
-        - action="delete"
-        - item!="frontend"
+        - action=="delete"
+        - item!=="frontend"
     
     - name: Delete frontend R53 record
       amazon.aws.route53:
@@ -78,7 +78,7 @@
         type: A
       loop: "{{ name_of_instances }}"
       when: 
-        - action="delete"
+        - action=="delete"
         - item=="frontend"
             
     - name: Deleting multiple instances
