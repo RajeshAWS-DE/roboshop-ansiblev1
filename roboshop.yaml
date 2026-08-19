@@ -15,7 +15,7 @@
         image_id: "{{ image_id }}"
         vpc_subnet_id: vpc-0b1b30f3a7a88e567
         region: us-east-1
-        security_group: 
+        security_groups: 
           - "{{ sg_common }}"
           - "roboshop-{{ item }}"
         tags:
