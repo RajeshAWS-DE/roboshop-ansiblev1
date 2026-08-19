@@ -2,7 +2,7 @@
   hosts: local
   connection: local
   vars: 
-    name_of_instances: ["mongodb","mysql"]
+    name_of_instances: ["mongodb","mysql","frontend"]
     image_id: ami-0220d79f3f480ecf5
     domain_name: rajesh-lab.shop 
     action: create
