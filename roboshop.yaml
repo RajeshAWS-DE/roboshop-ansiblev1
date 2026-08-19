@@ -62,7 +62,7 @@
         name: "roboshop-{{ item }}"
         state: absent
         region: us-east-1
-      loop: "{{ instances }}"
+      loop: "{{ name_of_instances }}"
       when: action=="delete"
 
 
