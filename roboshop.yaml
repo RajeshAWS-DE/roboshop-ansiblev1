@@ -11,7 +11,7 @@
   tasks:
     - name: start multiple instances
       amazon.aws.ec2_instance:
-        name: "roboshop-{{item}}"
+        name: "roboshop-{{ item }}"
         instance_type: t3.micro
         image_id: "{{ image_id }}"
         region: us-east-1
@@ -30,7 +30,7 @@
 
     - name: Printing Ip_adress
       debug:
-        msg: "Item_name is {{item.item}} and ip address {{item.instances[0].[private_ip_address}}"
+        msg: "Item_name is {{ item.item }} and ip address {{ item.instances[0].[private_ip_address }}"
       loop: "{{ ec2_output.results }}"
 
 
