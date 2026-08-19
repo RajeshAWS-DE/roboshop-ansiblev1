@@ -24,6 +24,8 @@
       loop: "{{ name_of_instances }}"
       register: ec2_output
       when: action=="create"
+      tags:
+        - R53
 
     - name: Use a routing policy to distribute traffic
       amazon.aws.route53:
