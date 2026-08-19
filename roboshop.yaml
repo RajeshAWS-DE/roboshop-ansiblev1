@@ -30,11 +30,12 @@
         state: present
         zone: "{{ zone }}"
         record: "{{ item.item }}.{{ zone }}"
-        type: CNAME
+        type: A
         value: "{{ item.instances[0].private_ip_address }}"
         ttl: 1
       loop: "{{ ec2_output.results }}"
       when: item.item != "frontend"
+      tag: R53
 
     - name: Use a routing policy to distribute traffic
       amazon.aws.route53:
@@ -46,5 +47,6 @@
         ttl: 1
       loop: "{{ ec2_output.results }}"
       when: item.item == "frontend"
+      tag: R53
 
 
