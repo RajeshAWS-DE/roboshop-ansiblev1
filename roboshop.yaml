@@ -30,7 +30,7 @@
 
     - name: Printing Ip_adress
       debug:
-        msg: "Item_name is {{ item.item }} and ip address {{ item.instances[0].[private_ip_address] }}"
+        msg: "Item_name is {{ item.item }} and ip address {{ item.instances[0].private_ip_address }}"
       loop: "{{ ec2_output.results }}"
 
 
