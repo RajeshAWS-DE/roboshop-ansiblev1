@@ -56,7 +56,31 @@
         - action=="create"
       tags: 
         - R53
-      
+
+    - name: Delete R53 records but not frontend
+      amazon.aws.route53:
+        state: absent
+        zone: "{{ zone }}"
+        record: "{{ item }}.{{ domain_name }}"
+        ttl: 1
+        type: A
+      loop: "{{ name_of_instances }}"
+      when: 
+        - action="delete"
+        - item!="frontend"
+    
+    - name: Delete frontend R53 record
+      amazon.aws.route53:
+        state: absent
+        zone: "{{ zone }}"
+        record: "{{ domain_name }}"
+        ttl: 1
+        type: A
+      loop: "{{ name_of_instances }}"
+      when: 
+        - action="delete"
+        - item=="frontend"
+            
     - name: Deleting multiple instances
       amazon.aws.ec2_instance:
         name: "roboshop-{{ item }}"
