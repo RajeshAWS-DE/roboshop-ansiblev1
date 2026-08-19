@@ -67,7 +67,7 @@
       loop: "{{ name_of_instances }}"
       when: 
         - action=="delete"
-        - item!=="frontend"
+        - item!="frontend"
     
     - name: Delete frontend R53 record
       amazon.aws.route53:
