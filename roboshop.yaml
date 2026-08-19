@@ -38,7 +38,7 @@
       loop: "{{ ec2_output.results }}"
       when: 
         - item.item != "frontend"
-        - action= "create"
+        - action=="create"
       tags: 
         - R53
 
@@ -53,7 +53,7 @@
       loop: "{{ ec2_output.results }}"
       when: 
         - item.item == "frontend"
-        - action= "create"
+        - action=="create"
       tags: 
         - R53
       
