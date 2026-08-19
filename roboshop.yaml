@@ -36,7 +36,9 @@
         value: "{{ item.instances[0].private_ip_address }}"
         ttl: 1
       loop: "{{ ec2_output.results }}"
-      when: item.item != "frontend"
+      when: 
+        - item.item != "frontend"
+        - action= "create"
       tags: 
         - R53
 
@@ -49,7 +51,9 @@
         value: "{{ item.instances[0].private_ip_address }}"
         ttl: 1
       loop: "{{ ec2_output.results }}"
-      when: item.item == "frontend"
+      when: 
+        - item.item == "frontend"
+        - action= "create"
       tags: 
         - R53
       
