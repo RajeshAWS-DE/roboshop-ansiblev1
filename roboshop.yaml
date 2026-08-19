@@ -8,6 +8,7 @@
     action: create
     sg_common: roboshop-common
     my_ip: 136.185.89.27/32
+    zone: rajesh-lab.shop
   tasks:
     - name: start multiple instances
       amazon.aws.ec2_instance:
@@ -23,14 +24,27 @@
       loop: "{{ name_of_instances }}"
       register: ec2_output
       when: action=="create"
-    
-    - name: Printing ec2_output
-      debug:
-        msg: "{{ ec2_output }}"
 
-    - name: Printing Ip_adress
-      debug:
-        msg: "Item_name is {{ item.item }} and ip address {{ item.instances[0].private_ip_address }}"
+    - name: Use a routing policy to distribute traffic
+      amazon.aws.route53:
+        state: present
+        zone: "{{ zone }}"
+        record: "{{ item.item }}"
+        type: CNAME
+        value: "{{ item.instances[0].private_ip_address }}"
+        ttl: 1
       loop: "{{ ec2_output.results }}"
+      when: item.item != "frontend"
+
+    - name: Use a routing policy to distribute traffic
+      amazon.aws.route53:
+        state: present
+        zone: "{{ zone }}"
+        record: "{{ item.item }}"
+        type: CNAME
+        value: "{{ item.instances[0].private_ip_address }}"
+        ttl: 1
+      loop: "{{ ec2_output.results }}"
+      when: item.item == "frontend"
 
 
