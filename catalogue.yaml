@@ -1,0 +1,89 @@
+- name: configuring catalogue server
+  hosts: catalogue
+  tasks:
+    - name: Removing default node package
+      command: dnf module disable nodejs -y
+
+    - name: enabling default module
+      command: dnf module enable nodejs:20 -y
+    
+    - name: Installing required node package
+      package:
+        name: nodejs
+        state: present
+
+    - name: Creating system user
+      ansible.builtin.user:
+        name: roboshop
+        system: true
+        shell: /sbin/nologin
+        create_home: false
+        home: /app
+        comment: Roboshop system user
+      
+    - name: removing directory if exists
+      file:
+        path: /app
+        state: absent
+      
+    - name: removing directory if exists
+      file:
+        path: /tmp/catalogue.zip
+        state: absent
+      
+    - name: Creating directory
+      file:
+        state: directory
+        path: /app 
+      
+    - name: Download catalogue file from github
+      ansible.builtin.get_url:
+        url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
+        dest: /tmp/catalogue.zip
+      
+    - name: Unarchive a catalogue application
+      ansible.builtin.unarchive:
+        src: /tmp/catalogue.zip
+        dest: /app
+      
+    - name: Installing dependencies
+      community.general.npm:
+        path: /app
+    
+    - name: Copy catalogue service file
+      ansible.builtin.template:
+        src: catalogue.service.j2
+        dest: /etc/systemd/system/catalogue.service
+      
+    - name: copying mongo repo to repo
+      file:
+        src: mongo.repo
+        dest: /etc/yum.repos.d/mongo.repo
+    
+    - name: installing mongo shell 
+      package:
+        name: mongodb-mongosh
+        state: present
+      
+    - name: Loading data
+      shell: mongosh --host "{{ mongodb_url }}" </app/db/master-data.js
+      
+
+    - name: setting daemon-reload
+      systemd_service:
+        daemon_reload: true
+
+      
+    - name: starting catalogue service
+      service:
+        name:  catalogue
+        state: restarted
+        enabled: yes
+
+    
+
+      
+    
+      
+    
+

@@ -1,0 +1,24 @@
+- name: Configuring mongodb instance 
+  hosts: mongodb
+  tasks:
+    - name: Copying file
+      copy:
+        src: ./mongo.repo
+        dest: /etc/yum.repos.d/mongo.repo
+
+    - name: Installing mongodb
+      package:
+        name: mongodb-org
+        state: present
+
+    - name: allow remote connections
+      replace:
+        path: /etc/mongod.conf
+        regexp: '127.0.0.1'
+        replace: '0.0.0.0'
+      
+    - name: starting mongodb service
+      service:
+        name:  mongod
+        state: restarted
+        enabled: yes
